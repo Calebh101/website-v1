@@ -1,0 +1,353 @@
+<html>
+  <head>
+    <title>PWAmaker PWA Loader</title>
+    <link rel="icon" href="/images/icons/pwamaker/large-transparent.png" type="image/png">
+
+    <script>
+      console.log("PWA.HTML");
+    </script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --theme-color: #ff6600
+        --bg-light: #ffffff;
+        --bg-dark: hsl(0, 0%, 12%);
+        --text-light: #141414;
+        --text-dark: #ffffff;
+        --popup-transition: 0.2s;
+      }
+
+      html {
+        font-family: 'Courier New', Courier, monospace;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      /* Default to light mode */
+      body {
+        background-color: var(--bg-light);
+        color: var(--text-light);
+        font-family: Arial, sans-serif;
+      }
+
+      /* Style links */
+      a {
+        color: var(--theme-color);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      button {
+        color: black;
+        border: 2px solid var(--text-light);
+        border-radius: 5px;
+        background-color: white;
+        transition: transform 0.25s ease-in-out;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      button:hover:not(.cupertino-design) {
+        transform: scale(1.1);
+      }
+
+      #icon {
+        box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+        width: 100px;
+        height: 100px;
+        border-radius: 15px;
+      }
+
+      #install.web-design {
+        width: 150px;
+        height: 75px;
+        font-size: 20px;
+        color: white;
+        background-color: gray;
+        box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+      }
+
+      #install.cupertino-design {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: white;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        background-color: gray;
+        box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      #install.cupertino-design:hover {
+        transform: translateY(-2px);
+      }
+
+      #install.cupertino-design:active {
+        transform: translateY(0);
+      }
+
+      #install.cupertino-design .icon {
+        margin-right: 8px;
+      }
+
+      .installable {
+        background-color: #007aff !important;
+      }
+
+      #popupOverlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity var(--popup-transition) ease, visibility var(--popup-transition) ease;
+      }
+
+      #popupOverlay.visible {
+          opacity: 1;
+          visibility: visible;
+      }
+
+      #popup {
+          color: black;
+          background: white;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          transform: scale(0.8);
+          transition: transform var(--popup-transition) ease;
+          max-width: 90%;
+          max-height: 90%;
+          overflow-x: hidden;
+          overflow-y: auto;
+      }
+
+      #popupOverlay.visible #popup {
+          transform: scale(1);
+      }
+
+      #closePopup {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          font-size: 24px;
+          cursor: pointer;
+      }
+
+      .clickable_icon {
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .clickable_icon:hover {
+        transform: translateY(-3px);
+      }
+
+      .clickable_icon:active {
+        transform: translateY(0) !important;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: var(--bg-dark);
+          color: var(--text-dark);
+        }
+
+        a {
+          color: var(--theme-color);
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
+
+        button {
+          border: 2px solid var(--text-dark);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div style="margin: auto; text-align: center; margin-top: 25px;">
+      <!--<image onclick="selectIcon()" id="icon" class="clickable_icon" src="/images/icons/placeholder/more_horiz.png"></image>-->
+      <image id="icon" src="/images/placeholder/more_horiz.png"></image>
+      <h1 id="title" style="margin-bottom: 0px;">Loading...</h1>
+      <h2 id="url" style="margin-top: 0px;">Loading...</h2>
+      <p id="desc" style="margin-bottom: 20px;">Loading...</p>
+      <button id="install" class="cupertino-design" onclick="install();">Install</button>
+    </div>
+
+    <!-- I used ChatGPT for the entire popup animation and box, I'm just gonna admit it up front -->
+    <div id="popupOverlay" class="hidden">
+      <div id="popup">
+        <span id="closePopup">&times;</span>
+        <h2>How to Install</h2>
+        <div id="installDialogue" style="margin-bottom: 15px;">Loading...</div>
+        <button id="dismissPopup">Dismiss</button>
+      </div>
+    </div>
+
+    <script>
+      console.log("starting pwa.html initialization");
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const closePopup = document.getElementById("closePopup");
+        const dismissPopup = document.getElementById("dismissPopup");
+        const popupOverlay = document.getElementById("popupOverlay");
+
+        // Hide popup
+        const hidePopup = () => {
+          popupOverlay.classList.remove("visible");
+        };
+
+        closePopup.addEventListener("click", hidePopup);
+        dismissPopup.addEventListener("click", hidePopup);
+
+        // Hide popup on clicking outside of it
+        popupOverlay.addEventListener("click", (e) => {
+          if (e.target === popupOverlay) {
+            hidePopup();
+          }
+        });
+
+        var installDialogue = `To install this website as an app, you will first need to share the website to your home screen. On mobile, click the share button or icon, and press "Add to Home Screen". Follow the steps and continue. If you are on desktop, then sharing will vary by browser, but you want to look for something like "Install as App" or "Add to Dock".`;
+
+        document.getElementById("installDialogue").innerHTML = installDialogue;
+      });
+
+      function selectIcon() {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.jpg,.png';
+
+        fileInput.addEventListener('change', (event) => {
+          const files = event.target.files;
+          const utf8Encoded = new TextEncoder().encode(files);
+          const base64Encoded = btoa(String.fromCharCode(...utf8Encoded));
+          start(base64Encoded, true);
+        });
+
+        fileInput.click();
+      }
+
+      function isPWA() {
+        return window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+      }
+
+      async function start(overwrite) {
+        console.log("starting (" + overwrite + ")")
+
+        var defaultData = {
+          "name": "Calebh101",
+          "desc": "Calebh101 website",
+          "url": "https://calebh101studios.web.app",
+          "icon": "/images/icons/pwamaker/small-full.png",
+        };
+
+        var installable = false;
+        const params = new URLSearchParams(window.location.search);
+        var data;
+
+        try {
+          const dataParam = params.get("data");
+          data = dataParam ? JSON.parse(dataParam) : defaultData;
+        } catch (error) {
+          console.error("Error parsing data: " + error);
+          data = defaultData;
+        }
+
+        data.name ??= defaultData.name;
+        data.desc ??= defaultData.desc;
+        data.icon ??= defaultdata.icon;
+
+        console.log("icon URL: " + data.icon);
+
+        if (isPWA()) {
+          console.log("Loading PWA with " + JSON.stringify(data));
+          debugger;
+          window.location.href = data.url;
+        } else {
+          console.log("Loaded data with: " + JSON.stringify(data));
+        }
+
+        var manifest = {
+          name: data.name,
+          short_name: data.name,
+          description: data.desc,
+          display: "standalone",
+          background_color: "#ffffff",
+          theme_color: "#000000",
+          icons: [
+            {
+              src: data.icon,
+              type: "image/png",
+              sizes: "1024x1024"
+            },
+          ]
+        };
+
+        if (!isPWA()) {
+          console.log("PWA ready");
+
+          var manifestLink = document.createElement('link');
+          manifestLink.rel = 'manifest';
+          manifestLink.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
+          document.head.appendChild(manifestLink);
+
+          document.getElementById("title").innerHTML = data.name;
+          document.getElementById("url").innerHTML = "<a target='_blank' href='" + data.url + "'>" + data.url + "</a>";
+          document.getElementById("desc").innerHTML = data.desc;
+          document.getElementById("icon").src = data.icon;
+          document.getElementById("install").classList.add("installable");
+
+          installable = true;
+        }
+      }
+
+      async function getData(url) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.text();
+          return data;
+        } catch (error) {
+          throw new Error('There was a problem with the fetch operation:', error);
+        }
+      }
+
+      function install() {
+        if (installable) {
+          console.log("installing...");
+          popupOverlay.classList.add("visible");
+        }
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      start(false);
+    </script>
+  </body>
+</html>
