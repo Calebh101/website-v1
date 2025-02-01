@@ -1,21 +1,24 @@
-# what are you doing here
-
 import http.server
 import socketserver
 import os
 
-class handler(http.server.SimpleHTTPRequestHandler):
+DIR = "public"
+PORT = 8020
+
+class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        if not self.path.endswith(".html") and not "." in self.path:
-            possible_html = self.path.lstrip("/") + ".html"
+        if not self.path.endswith(".html") and "." not in self.path:
+            possible_html = os.path.join(DIR, self.path.lstrip("/") + ".html")
             if os.path.exists(possible_html):
                 self.path += ".html"
-
+        
         return super().do_GET()
-
-PORT = 8020
-Handler = handler
+    
+    def translate_path(self, path):
+        root = os.path.abspath(DIR)
+        path = path.lstrip("/")
+        return os.path.join(root, path)
 
 with socketserver.TCPServer(("", PORT), Handler) as httpd:
-    print(f"server running on port {PORT}")
+    print(f"server started at http://localhost:{PORT} at {DIR}")
     httpd.serve_forever()
