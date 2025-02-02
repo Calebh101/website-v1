@@ -93,7 +93,7 @@ function generateFeed(type: string, query: string | null) {
           var urlText = 'Webpage: <a href="' + element.url.website + '" target="_blank">' + element.url.website + '</a>';
 
           if (element.url.github) {
-            urlText = urlText + '\nGitHub: <a href="' + element.url.github + '" target="_blank">' + element.url.github + '</a>';
+            urlText = urlText + '<br>GitHub: <a href="' + element.url.github + '" target="_blank">' + element.url.github + '</a>';
           }
 
           div.onclick = function() {
@@ -108,7 +108,7 @@ function generateFeed(type: string, query: string | null) {
             categories.push(category.split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' '));
           });
 
-          div.innerHTML = `<h3>${highlightText(query, element.name)}</h3><p>${highlightText(query, element.summary)}</p><p class="small">V. ${element.version}\nCategories: ${categories.join(', ')}</p><p>${urlText}</p><p>${platformText}</p>`;
+          div.innerHTML = `<h3>${highlightText(query, element.name)}</h3><p>${highlightText(query, element.summary)}</p><p class="small">V. ${element.version}<br>Categories: ${categories.join(', ')}</p><p>${urlText}</p><p>${platformText}</p>`;
 
           container.appendChild(div);
           divs.push(container);
