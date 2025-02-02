@@ -19,6 +19,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         path = path.lstrip("/")
         return os.path.join(root, path)
 
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
-    print(f"server started at http://localhost:{PORT} at {DIR}")
+with socketserver.TCPServer(("0.0.0.0", PORT), Handler) as httpd:
+    print(f"server started at http://0.0.0.0:{PORT} at {DIR}")
     httpd.serve_forever()

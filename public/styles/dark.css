@@ -1,0 +1,13 @@
+:root {
+    --background: linear-gradient(to left, #222, #111);
+    --text: #fff
+}
+
+body {
+    color: var(--text);
+    background: var(--background);
+}
+
+.title-div {
+    background: var(--background);
+}

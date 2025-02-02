@@ -1,0 +1,13 @@
+:root {
+    --background: #fff;
+    --text: #000
+}
+
+body {
+    color: var(--text);
+    background-color: var(--background);
+}
+
+.title-div {
+    background-color: var(--background);
+}
