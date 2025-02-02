@@ -11,3 +11,7 @@ body {
 .title-div {
     background: var(--background);
 }
+
+.invert {
+    filter: invert(100%);
+}

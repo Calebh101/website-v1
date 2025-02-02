@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Calebh101</title>
+    <script src="/scripts/main.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/fonts.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="title-div-container-container">
+      <div class="title-div-container gradient-2-reverse">
+        <div class="title-div">
+          <h1 class="title-text gradient-2-text-reverse roboto-bold" style="font-size: 48px;">My Apps</h1>
+        </div>
+      </div>
+    </div>
+    <div class="feed-search">
+      <input type="text" class="styled-input" id="feed-query" name="Search" placeholder="Search...">
+      <select id="typeSelect" class="styled-dropdown" name="options">
+        <option value="all">All</option>
+        <option value="application">Apps</option>
+        <option value="vsextension">Visual Studio Extensions</option>
+        <option value="discordbot">Discord Bots</option>
+        <option value="dartpackage">Dart/Flutter Packages</option>
+        <option value="project">Projects</option>
+      </select>
+    </div>
+    <div class="feed-container">
+        <p>Loading...</p>
+    </div>
+    <script>
+        const dropdown = document.getElementById("typeSelect");
+        const queryField = document.getElementById("feed-query");
+
+        const params = new URLSearchParams(window.location.search);
+        const types = Array.from(dropdown.options).map(option => option.value);
+        const type = params.get('type');
+        dropdown.value = type;
+
+        if (!types.includes(type)) {
+          warn("invalid selection: " + type);
+          dropdown.value = "all";
+        }
+
+        const query = params.get('query');
+        queryField.value = query;
+
+        print("loading feed...");
+        loadFeed();
+
+        if (dropdown) {
+          dropdown.addEventListener("change", function () {
+            print("action: dropdown.change");
+            const url = new URL(window.location);
+            url.searchParams.set('type', dropdown.value);
+            window.history.pushState({}, '', url);
+            generateFeed(dropdown.value, queryField.value);
+          });
+
+          queryField.addEventListener("change", function () {
+            print("action: queryField.change");
+            const url = new URL(window.location);
+            url.searchParams.set('query', queryField.value);
+            window.history.pushState({}, '', url);
+            generateFeed(dropdown.value, queryField.value);
+          });
+
+          queryField.addEventListener("input", function () {
+            print("action: queryField.input");
+            generateFeed(dropdown.value, queryField.value);
+          });
+        } else {
+          warn("dropdown not found");
+        }
+    </script>
+  </body>
+</html>

@@ -1,12 +1,16 @@
 import http.server
 import socketserver
 import os
+from urllib.parse import urlparse
 
 DIR = "public"
-PORT = 8020
+PORT = 8030
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
+        parsed_path = urlparse(self.path)
+        self.path = parsed_path.path
+        
         if not self.path.endswith(".html") and "." not in self.path:
             possible_html = os.path.join(DIR, self.path.lstrip("/") + ".html")
             if os.path.exists(possible_html):
