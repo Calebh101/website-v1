@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Calebh101</title>
+    <script src="/scripts/main.js"></script>
+    <script src="/scripts/catalog.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/fonts.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="navbar"></div>
+    <div class="title-div-container-container">
+      <div class="title-div-container gradient-2-reverse">
+        <div class="title-div">
+          <h1 class="title-text gradient-2-text-reverse roboto-bold" style="font-size: 48px;">Service Status</h1>
+        </div>
+      </div>
+    </div>
+    <div class="status-search">
+      <input type="text" class="styled-input" id="status-query" name="Search" placeholder="Search...">
+      <button onclick="generateStatusSpreadsheet()" class="styled-button">Download</button>
+    </div>
+    <div class="status-container">
+        <p>Loading...</p>
+    </div>
+    <div id="footer"></div>
+    <script>
+        const queryField = document.getElementById("status-query");
+        const params = new URLSearchParams(window.location.search);
+        const query = params.get('query');
+        queryField.value = query;
+
+        print("loading status...");
+        loadStatus();
+
+        queryField.addEventListener("change", function () {
+          print("action: queryField.change");
+          const url = new URL(window.location);
+          url.searchParams.set('query', queryField.value);
+          window.history.pushState({}, '', url);
+          generateStatus(queryField.value);
+        });
+
+        queryField.addEventListener("input", function () {
+          print("action: queryField.input");
+          generateStatus(queryField.value);
+        });
+
+        function generateStatusSpreadsheet() {
+          var spreadsheet = [
+            ["Service", "Name", "Item", "Status", "Message"],
+          ];
+
+          const data = statusData;
+          const catalog = Object.keys(data.status);
+
+          catalog.forEach((item, index) => {
+            const element = (data.status)[item];
+            const serviceData = element.services;
+            const serviceKeys = Object.keys(serviceData);
+
+            serviceKeys.forEach((key, i) => {
+              const item = serviceData[key];
+              const message = getDefaultStatusMessage(item.status)
+
+              spreadsheet.push([(i === 0 ? `${element.name}` : ""), `${item.name}`, `${key}`, `${message}`, `${item.message ?? message}`]);
+            });
+          });
+
+          const ws = XLSX.utils.aoa_to_sheet(spreadsheet);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+          XLSX.writeFile(wb, "calebh101status.xlsx");
+        }
+    </script>
+  </body>
+</html>

@@ -1,5 +1,6 @@
 :root {
     --theme-color: #00fff0;
+    --sub-theme-color: orange;
     --accent-color: #2400ff;
     --gradient1: linear-gradient(to right, red, yellow);
     --gradient1-reverse: linear-gradient(to left, red, yellow);
@@ -13,12 +14,16 @@ body {
 }
 
 a {
-    color: var(--theme-color);
+    color: var(--sub-theme-color);
     text-decoration: none;
 }
 
 a:hover {
     text-decoration: underline;
+}
+
+#footer {
+    text-align: center;
 }
 
 .gradient-1 {
@@ -89,34 +94,37 @@ a:hover {
     border-radius: 15px;
 }
 
-.feed-item-container {
+.apps-item-container, .status-item-container, .feed-item-container {
     padding: 10px;
 }
 
-.feed-item {
+.apps-item, .feed-item {
+    cursor: pointer;
+}
+
+.apps-item:hover, .feed-item:hover {
+    width: calc(80% + 30px);
+}
+
+.apps-item, .status-item, .feed-item {
     margin: auto;
     padding: 10px;
     border-radius: 15px;
     border: 2px solid white;
     transition: width 0.5s ease-in-out;
-    cursor: pointer;
     width: 80%;
 }
 
-.feed-item:hover {
-    width: calc(80% + 30px);
-}
-
-.feed-search {
+.apps-search, .status-search, .feed-search {
     margin: auto;
     text-align: center;
 }
 
-.styled-dropdown {
+.styled-dropdown, .styled-button {
     cursor: pointer;
 }
 
-.styled-input, .styled-dropdown {
+.styled-input, .styled-dropdown, .styled-button {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;

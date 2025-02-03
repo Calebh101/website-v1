@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Calebh101</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="/scripts/main.js"></script>
+    <script src="/scripts/catalog.js"></script>
+
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/fonts.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="navbar"></div>
+    <div class="title-div-container-container">
+      <div class="title-div-container gradient-2-reverse">
+        <div class="title-div">
+          <h1 class="title-text gradient-2-text-reverse roboto-bold" style="font-size: 48px;">My Apps</h1>
+        </div>
+      </div>
+    </div>
+    <div class="apps-search">
+      <input type="text" class="styled-input" id="apps-query" name="query" placeholder="Search...">
+      <select id="typeSelect" class="styled-dropdown" name="types">
+        <option value="all">All</option>
+        <option value="application">Apps</option>
+        <option value="extension">Extensions</option>
+        <option value="discordbot">Discord Bots</option>
+        <option value="dartpackage">Dart/Flutter Packages</option>
+        <option value="project">Projects</option>
+      </select>
+      <select id="platformSelect" class="styled-dropdown" name="platforms[]">
+        <option value="all">All</option>
+        <option value="ios">iOS</option>
+        <option value="android">Android</option>
+        <option value="windows">Windows</option>
+        <option value="macos">macOS</option>
+        <option value="linux">Linux</option>
+        <option value="dart">Dart</option>
+        <option value="flutter">Flutter</option>
+        <option value="vscode">VS Code</option>
+        <option value="discord">Discord</option>
+    </select>
+    </div>
+    <div class="apps-container">
+        <p>Loading...</p>
+    </div>
+    <div id="footer"></div>
+    <script>
+        const dropdown = document.getElementById("typeSelect");
+        const platformField = document.getElementById("platformSelect");
+        const queryField = document.getElementById("apps-query");
+
+        const params = new URLSearchParams(window.location.search);
+        const types = Array.from(dropdown.options).map(option => option.value);
+        const platforms = Array.from(platformField.options).map(option => option.value);
+        const type = params.get('type');
+        const platform = params.get('platform');
+
+        dropdown.value = type;
+        platformField.value = platform;
+
+        if (!types.includes(type)) {
+          warn("invalid selection: " + type);
+          dropdown.value = "all";
+        }
+
+        if (!platforms.includes(platform)) {
+          warn("invalid selection: " + type);
+          platformField.value = "all";
+        }
+
+        const query = params.get('query');
+        queryField.value = query;
+
+        print("loading apps...");
+        loadApps();
+
+        if (dropdown) {
+          dropdown.addEventListener("change", function () {
+            print("action: dropdown.change");
+            const url = new URL(window.location);
+            url.searchParams.set('type', dropdown.value);
+            window.history.pushState({}, '', url);
+            generateApps(dropdown.value, queryField.value, [platformField.value]);
+          });
+
+          platformField.addEventListener("change", function () {
+            print("action: platformField.change");
+            const url = new URL(window.location);
+            url.searchParams.set('type', platformField.value);
+            window.history.pushState({}, '', url);
+            generateApps(dropdown.value, queryField.value, [platformField.value]);
+          });
+
+          queryField.addEventListener("change", function () {
+            print("action: queryField.change");
+            const url = new URL(window.location);
+            url.searchParams.set('query', queryField.value);
+            window.history.pushState({}, '', url);
+            generateApps(dropdown.value, queryField.value, [platformField.value]);
+          });
+
+          queryField.addEventListener("input", function () {
+            print("action: queryField.input");
+            generateApps(dropdown.value, queryField.value, [platformField.value]);
+          });
+        } else {
+          warn("dropdown not found");
+        }
+    </script>
+  </body>
+</html>

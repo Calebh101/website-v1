@@ -211,13 +211,13 @@
 
     <script>
       console.log("starting pwa.html initialization");
+      var installable = false;
 
       document.addEventListener("DOMContentLoaded", () => {
         const closePopup = document.getElementById("closePopup");
         const dismissPopup = document.getElementById("dismissPopup");
         const popupOverlay = document.getElementById("popupOverlay");
 
-        // Hide popup
         const hidePopup = () => {
           popupOverlay.classList.remove("visible");
         };
@@ -225,7 +225,6 @@
         closePopup.addEventListener("click", hidePopup);
         dismissPopup.addEventListener("click", hidePopup);
 
-        // Hide popup on clicking outside of it
         popupOverlay.addEventListener("click", (e) => {
           if (e.target === popupOverlay) {
             hidePopup();
@@ -262,11 +261,10 @@
         var defaultData = {
           "name": "Calebh101",
           "desc": "Calebh101 website",
-          "url": "https://calebh101studios.web.app",
+          "url": "https://calebh101",
           "icon": "/images/icons/pwamaker/small-full.png",
         };
 
-        var installable = false;
         const params = new URLSearchParams(window.location.search);
         var data;
 
