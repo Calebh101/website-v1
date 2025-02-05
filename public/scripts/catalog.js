@@ -18,7 +18,9 @@ function loadApps() {
         const platform = document.getElementById("platformSelect");
         generateApps(dropdown.value, queryField.value, [platform.value]);
     })
-        .catch(error => { print(error); });
+        .catch(error => {
+        handleError(error, 'apps');
+    });
 }
 function generateApps(type, query, platform) {
     const data = appsData;
@@ -105,7 +107,29 @@ function loadStatus() {
         const queryField = document.getElementById("status-query");
         generateStatus(queryField.value);
     })
-        .catch(error => { print(error); });
+        .catch(error => {
+        handleError(error, 'status');
+    });
+}
+function handleError(e, type) {
+    const containerId = `${type}-container`;
+    print(`${type} fetch error: ${e} (elements: (new div), ${containerId})`);
+    const div = document.createElement('div');
+    const containers = document.getElementsByClassName(containerId);
+    const container = containers[0];
+    const search = document.querySelector(`${type}-search`);
+    if (!container) {
+        error("invalid elements:", container, search);
+        return;
+    }
+    if (search) {
+        search.innerHTML = '';
+    }
+    container.innerHTML = '';
+    container.classList.add(`${type}-item-container`);
+    div.innerHTML = `<h3 style="text-align: center;">Error: service unavailable</h3>`;
+    div.classList.add(`${type}-item`, 'roboto');
+    container.appendChild(div);
 }
 function generateStatus(query) {
     const data = statusData;
@@ -177,7 +201,9 @@ function loadFeed() {
         feedData = data;
         generateFeed(queryField.value);
     })
-        .catch(error => { print(error); });
+        .catch(error => {
+        handleError(error, 'feed');
+    });
 }
 function generateFeed(query) {
     const data = feedData;

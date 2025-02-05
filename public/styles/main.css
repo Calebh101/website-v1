@@ -9,7 +9,7 @@
 }
 
 body {
-    transition: background-color 0.3s ease-in-out;
+    transition: color background-color 0.3s ease-in-out;
     overflow-x: hidden;
 }
 
@@ -22,8 +22,19 @@ a:hover {
     text-decoration: underline;
 }
 
+.filter {
+    transition: filter 0.5s ease-in-out;
+}
+
 #footer {
     text-align: center;
+    margin: auto;
+    margin-top: auto;
+    background-color: black;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 20px;
+    width: 95%;
 }
 
 .gradient-1 {
@@ -98,19 +109,39 @@ a:hover {
     padding: 10px;
 }
 
-.apps-item, .feed-item {
+.apps-item, .feed-item, .navbar-item {
     cursor: pointer;
 }
 
-.apps-item:hover, .feed-item:hover {
+.apps-item:hover, .feed-item:hover, .navbar-item:hover {
     width: calc(80% + 30px);
+}
+
+#navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-item {
+    padding: 10px;
+    border-radius: 15px;
+    transition: width 0.5s ease-in-out;
+    width: 20%;
+    max-width: 100px;
+    text-align: center;
+}
+
+.navbar-item img {
+    padding: 10px;
+    vertical-align: middle;
 }
 
 .apps-item, .status-item, .feed-item {
     margin: auto;
     padding: 10px;
     border-radius: 15px;
-    border: 2px solid white;
     transition: width 0.5s ease-in-out;
     width: 80%;
 }

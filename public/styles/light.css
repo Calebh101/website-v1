@@ -11,3 +11,15 @@ body {
 .title-div {
     background-color: var(--background);
 }
+
+.invert {
+    filter: invert(0%);
+}
+
+.apps-item, .status-item, .feed-item, .navbar-item {
+    border: 2px solid black;
+}
+
+.nav-item-highlight {
+    background-color: #eee;
+}

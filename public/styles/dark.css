@@ -15,3 +15,11 @@ body {
 .invert {
     filter: invert(100%);
 }
+
+.apps-item, .status-item, .feed-item, .navbar-item {
+    border: 2px solid white;
+}
+
+.nav-item-highlight {
+    background-color: #222;
+}

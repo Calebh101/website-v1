@@ -18,7 +18,9 @@ function loadApps() {
         const platform = document.getElementById("platformSelect") as HTMLInputElement;
         generateApps(dropdown.value, queryField.value, [platform.value]);
     })
-    .catch(error => {print(error)});
+    .catch(error => {
+        handleError(error, 'apps');
+    });
 }
 
 function generateApps(type: string, query: string | null, platform: Array<any> | null) {
@@ -123,7 +125,33 @@ function loadStatus() {
         const queryField = document.getElementById("status-query") as HTMLInputElement;
         generateStatus(queryField.value);
     })
-    .catch(error => {print(error)});
+    .catch(error => {
+        handleError(error, 'status');
+    });
+}
+
+function handleError(e: Error, type: string) {
+    const containerId: string = `${type}-container`;
+    print(`${type} fetch error: ${e} (elements: (new div), ${containerId})`);
+    const div = document.createElement('div');
+    const containers = document.getElementsByClassName(containerId);
+    const container = containers[0];
+    const search = document.querySelector(`${type}-search`)!;
+
+    if (!container) {
+        error("invalid elements:", container, search);
+        return;
+    }
+
+    if (search) {
+        search.innerHTML = '';
+    }
+
+    container.innerHTML = '';
+    container.classList.add(`${type}-item-container`);
+    div.innerHTML = `<h3 style="text-align: center;">Error: service unavailable</h3>`;
+    div.classList.add(`${type}-item`, 'roboto');
+    container.appendChild(div);
 }
 
 function generateStatus(query: string | null) {
@@ -207,7 +235,9 @@ function loadFeed() {
         feedData = data;
         generateFeed(queryField.value);
     })
-    .catch(error => {print(error)});
+    .catch(error => {
+        handleError(error, 'feed');
+    });
 }
 
 function generateFeed(query: string | null) {
